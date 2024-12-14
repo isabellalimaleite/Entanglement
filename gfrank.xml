@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--Copyright 2023 The MathWorks, Inc.-->
+
+<rsccat xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.0" locale="ko_KR" product="comm" xsi:noNamespaceSchemaLocation="../../resources/schema/msgcat.xsd">
+  <message>
+    <entry key="PNotPrime">The P input must be prime.</entry>
+    <entry key="InvalidElementsInAB">A 및 B의 요소는 0과 P-1 사이의 음이 아닌 정수여야 합니다.</entry>
+  </message>
+</rsccat>

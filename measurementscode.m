@@ -38,7 +38,7 @@ end
 function t = create_random_circuit_with_measurements(num_qubits, num_layers, p)
     t = 0;  % Initialize timestep counter
     fileID = fopen('programs\entropycircuit.chp','w');
-    fprintf(fileID,'#\n');
+    fprintf(fileID, '#\n');
 
     % Loop through layers and apply gates and measurements
     for layer = 1:num_layers
@@ -48,31 +48,39 @@ function t = create_random_circuit_with_measurements(num_qubits, num_layers, p)
             switch gate
                 case 1
                     fprintf(fileID, 'h %d\n', qubit-1);  % Apply H gate
+                    t = t + 1;
                 case 2
-                    fprintf(fileID, 'h %d\n', qubit-1);  % Apply H gate
+                    fprintf(fileID, 'h %d\n', qubit-1);  % Apply X gate
+                    t = t + 1;
                 case 3
                     fprintf(fileID, 'p %d\n', qubit-1);  % Apply P gate
+                    t = t + 1;
             end
-            t = t + 1;
         end
 
         % Apply two-qubit entangling gates (CNOT)
         num_entangling_gates = ceil(num_qubits / 2);
         for i = 1:num_entangling_gates
-            control = randi([1 num_qubits]) - 1;  % Random control qubit
+            control = randi([0 num_qubits-1]);  % Random control qubit
             % Choose target from the remaining qubits, ensuring it's not the same as control
             possible_targets = setdiff(0:num_qubits-1, control);  % Exclude control from possible targets
             target = possible_targets(randi(length(possible_targets)));  % Random target qubit
-            if control == target
-                disp('error')
-            end
             fprintf(fileID, 'c %d %d\n', control, target);  % Apply CNOT gate
             t = t + 1;
         end
+
+        % Apply measurements with probability p
+        for qubit = 1:num_qubits
+            if rand() < p
+                fprintf(fileID, 'm %d\n', qubit-1);  % Measure qubit
+                t = t + 1;
+            end
+        end
     end
-    
+
     fclose(fileID);
 end
+
 
 % Provided entropy function
 function entrobj = calcentropy(qstate, region, stabdestab)
